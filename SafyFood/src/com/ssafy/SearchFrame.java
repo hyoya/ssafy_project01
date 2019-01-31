@@ -19,6 +19,7 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.event.ActionListener;
+import javax.swing.JScrollPane;
 
 public class SearchFrame extends JFrame {
 
@@ -29,29 +30,17 @@ public class SearchFrame extends JFrame {
 	private JButton sb;
 	private JComboBox cb;
 	private JTable dt;
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					SearchFrame frame = new SearchFrame();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private JScrollPane spnw;
+	private DefaultTableModel smodel, dmodel;
+	private JScrollPane spnc;
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public SearchFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 300);
+		setBounds(100, 100, 600, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -77,34 +66,24 @@ public class SearchFrame extends JFrame {
 		sb.setAction(action);
 		pnn.add(sb);
 		
-		JPanel pnc = new JPanel();
-		contentPane.add(pnc, BorderLayout.WEST);
-		pnc.setLayout(new BorderLayout(0, 0));
-		
 		String sheader[] = {"상품 코드", "상품이름", "제조사", "원재료"};
-		DefaultTableModel smodel = new DefaultTableModel(sheader, 0);
-		smodel.addRow(new Object[] {"123","123","!23123","adsfasdfasdf"});
+		smodel = new DefaultTableModel(sheader, 0);
+		smodel.addRow(new Object[] {"상품코드","상품이름","!23123","adsfasdfasdf"});
 		
 		
-		st = new JTable(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"\uC0C1\uD488 \uCF54\uB4DC", "\uC0C1\uD488\uC774\uB984", "\uC81C\uC870\uC0AC", "\uC6D0\uC7AC\uB8CC"
-			}
-		));
-		pnc.add(st, BorderLayout.CENTER);
+		st = new JTable(smodel);
 		
-		JPanel pne = new JPanel();
-		contentPane.add(pne, BorderLayout.CENTER);
-		pne.setLayout(new BorderLayout(0, 0));
-		
-		String dheader[] = {"", ""};
-		DefaultTableModel dmodel = new DefaultTableModel(dheader, 0);
+		String dheader[] = {"영양성분", "함량"};
+		dmodel = new DefaultTableModel(dheader, 0);
 		dmodel.addRow(new Object[] {"dafd", "adfas"});
 		
 		dt = new JTable(dmodel);
-		pne.add(dt, BorderLayout.CENTER);
+		
+		spnw = new JScrollPane(st);
+		contentPane.add(spnw, BorderLayout.WEST);
+		
+		spnc = new JScrollPane(dt);
+		contentPane.add(spnc, BorderLayout.CENTER);
 		
 		
 	}
@@ -115,13 +94,15 @@ public class SearchFrame extends JFrame {
 			putValue(SHORT_DESCRIPTION, "Some short description");
 		}
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == sb) {
+			if(e.getSource() == sb) { //서치 버튼을 눌렀다면
 				String tag = cb.getSelectedItem().toString();
 				String input = tf.getText();
 				
-				System.out.println(tag +" :  " + input);
+				
 				//TODO tag와 input을 받아서 서치
 			}
 		}
 	}
+	
+	
 }
