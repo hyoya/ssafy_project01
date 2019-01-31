@@ -37,12 +37,13 @@ public class SearchFrame extends JFrame {
 	private DefaultTableModel smodel, dmodel;
 	private JScrollPane spnc;
 	private FoodSAX fsax;
+	private List<Foods> list;
 
 	/**
 	 * Create the frame.
 	 */
 	public SearchFrame() {
-		fsax = new FoodSAX();
+		list = new FoodSAX().getFoodsList();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 500);
 		contentPane = new JPanel();
@@ -102,24 +103,21 @@ public class SearchFrame extends JFrame {
 				String tag = cb.getSelectedItem().toString();
 				String input = tf.getText();
 				//TODO
-				String url = "http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService?ServiceKey=nw2RgjbfShJMzZ05sLGUzWEasNUweUuRNuA6YHyEvNHn9b3Ahc9rp8VMOKYbPW5qb%2FKqQ0eP1imWvPWKnjJ9Zw%3D%3D&numOfRows=100";
 				String sp[];
-				List<Foods> res = fsax.getFoodsList(url);
 				
 				while(smodel.getRowCount() != 0) {
 					smodel.removeRow(0);
 				}
 				
 				
-				
 				if(tag.equals("상품명")) {
 					if(input.equals("")) {
-						for(Foods f : res) {
+						for(Foods f : list) {
 							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 						}
 					}else {
-						for(Foods f : res) {
-							if(f.getFoodname().equals(input)) {
+						for(Foods f : list) {
+							if(f.getFoodname().contains(input)) {
 								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 							}
 						}						
@@ -130,11 +128,11 @@ public class SearchFrame extends JFrame {
 					
 				}else if(tag.equals("제조사")) {
 					if(input.equals("")) {
-						for(Foods f : res) {
+						for(Foods f : list) {
 							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 						}
 					}else {
-						for(Foods f : res) {
+						for(Foods f : list) {
 							if(f.getMaker().contains(input)) {
 								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 							}
@@ -145,11 +143,11 @@ public class SearchFrame extends JFrame {
 					
 				}else if(tag.equals("원재료명")) {
 					if(input.equals("")) {
-						for(Foods f : res) {
+						for(Foods f : list) {
 							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 						}
 					}else {
-						for(Foods f : res) {
+						for(Foods f : list) {
 							if(f.getMaterial().contains(input)) {
 								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
 							}
