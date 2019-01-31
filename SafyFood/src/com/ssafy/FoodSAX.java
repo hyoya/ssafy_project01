@@ -60,6 +60,10 @@ public class FoodSAX {
 					break;
 				case "rawmtrl": food.setMaterial(b.toString().trim());
 					break;
+				case "nutrient": food.setNut(b.toString().trim());
+					break;
+				case "imgurl1": food.setImage(b.toString().trim());
+					break;
 				case "item":
 					list.add(food);
 				}
