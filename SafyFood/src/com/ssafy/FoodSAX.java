@@ -23,9 +23,6 @@ public class FoodSAX {
 	List<Foods> list = new ArrayList<>();
 	
 	public List<Foods> getFoodsList(){
-		//list.clear();
-//		String url = "http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService?ServiceKey=nw2RgjbfShJMzZ05sLGUzWEasNUweUuRNuA6YHyEvNHn9b3Ahc9rp8VMOKYbPW5qb%2FKqQ0eP1imWvPWKnjJ9Zw%3D%3D&numOfRows=100";
-//		connectFoods(url);
 		return list;
 	}
 	
@@ -64,6 +61,8 @@ public class FoodSAX {
 				case "manufacture": food.setMaker(b.toString().trim());
 					break;
 				case "rawmtrl": food.setMaterial(b.toString().trim());
+					break;
+				case "allergy": food.setAllergy(b.toString().trim());
 					break;
 				case "nutrient": food.setNut(b.toString().trim());
 					break;
