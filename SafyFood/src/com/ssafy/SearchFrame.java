@@ -99,7 +99,6 @@ public class SearchFrame extends JFrame {
 				String input = tf.getText();
 				
 				
-				//TODO tag와 input을 받아서 서치
 			}
 		}
 	}
