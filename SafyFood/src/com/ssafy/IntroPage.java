@@ -24,6 +24,10 @@ public class IntroPage implements ActionListener{
 		createFrame1GUI();
 		addEvent();
 	}
+
+	public void showFrame() {
+		f1.setVisible(true);
+	}
 	private void addEvent() {
 		b1.addActionListener(this);
 		
@@ -33,6 +37,7 @@ public class IntroPage implements ActionListener{
 		panel = new JPanel();
 		b1 = new JButton("검색");
 		
+		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f1.setLayout(new BorderLayout());
 		
 		title = new JLabel("SAFE FOOD");
@@ -57,6 +62,7 @@ public class IntroPage implements ActionListener{
 			SearchPage f2 = new SearchPage();
 			f1.setVisible(false);
 		}
+		
 		
 	}
 	

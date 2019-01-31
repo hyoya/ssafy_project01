@@ -21,10 +21,13 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+import com.ssafy.IntroPage;
 
 public class SearchFrame extends JFrame {
 
@@ -46,7 +49,13 @@ public class SearchFrame extends JFrame {
 	 */
 	public SearchFrame() {
 		fsax = new FoodSAX();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				IntroPage i = new IntroPage();
+				setVisible(false);
+				i.showFrame();
+			}
+		});
 		setBounds(100, 100, 1500, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -169,29 +178,5 @@ public class SearchFrame extends JFrame {
 			}
 		}
 	}
-	
-	public class Smodel extends DefaultTableModel{
-		
-		List<Foods> res;
-		
-		
-		public void setRes(List<Foods> res) {
-			this.res = res;
-		}
-
-		@Override
-		public int getRowCount() {
-			// TODO Auto-generated method stub
-			return res.size();
-		}
-
-		@Override
-		public Object getValueAt(int row, int column) {
-			
-			return super.getValueAt(row, column);
-		}
-		
-	}
-	
 	
 }
