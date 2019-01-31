@@ -19,6 +19,9 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JScrollPane;
 
 public class SearchFrame extends JFrame {
@@ -33,14 +36,15 @@ public class SearchFrame extends JFrame {
 	private JScrollPane spnw;
 	private DefaultTableModel smodel, dmodel;
 	private JScrollPane spnc;
-	
+	private FoodSAX fsax;
 
 	/**
 	 * Create the frame.
 	 */
 	public SearchFrame() {
+		fsax = new FoodSAX();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 500);
+		setBounds(100, 100, 1500, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -68,22 +72,22 @@ public class SearchFrame extends JFrame {
 		
 		String sheader[] = {"상품 코드", "상품이름", "제조사", "원재료"};
 		smodel = new DefaultTableModel(sheader, 0);
-		smodel.addRow(new Object[] {"상품코드","상품이름","!23123","adsfasdfasdf"});
+		//smodel.addRow(new Object[] {"상품코드","상품이름","!23123","adsfasdfasdf"});
 		
 		
 		st = new JTable(smodel);
 		
 		String dheader[] = {"영양성분", "함량"};
 		dmodel = new DefaultTableModel(dheader, 0);
-		dmodel.addRow(new Object[] {"dafd", "adfas"});
+		//dmodel.addRow(new Object[] {"dafd", "adfas"});
 		
 		dt = new JTable(dmodel);
 		
 		spnw = new JScrollPane(st);
-		contentPane.add(spnw, BorderLayout.WEST);
+		contentPane.add(spnw, BorderLayout.CENTER);
 		
 		spnc = new JScrollPane(dt);
-		contentPane.add(spnc, BorderLayout.CENTER);
+		contentPane.add(spnc, BorderLayout.EAST);
 		
 		
 	}
@@ -97,10 +101,87 @@ public class SearchFrame extends JFrame {
 			if(e.getSource() == sb) { //서치 버튼을 눌렀다면
 				String tag = cb.getSelectedItem().toString();
 				String input = tf.getText();
+				//TODO
+				String url = "http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService?ServiceKey=nw2RgjbfShJMzZ05sLGUzWEasNUweUuRNuA6YHyEvNHn9b3Ahc9rp8VMOKYbPW5qb%2FKqQ0eP1imWvPWKnjJ9Zw%3D%3D&numOfRows=100";
+				String sp[];
+				List<Foods> res = fsax.getFoodsList(url);
 				
+				while(smodel.getRowCount() != 0) {
+					smodel.removeRow(0);
+				}
+				
+				
+				
+				if(tag.equals("상품명")) {
+					if(input.equals("")) {
+						for(Foods f : res) {
+							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+						}
+					}else {
+						for(Foods f : res) {
+							if(f.getFoodname().equals(input)) {
+								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+							}
+						}						
+					}
+					
+					
+					
+					
+				}else if(tag.equals("제조사")) {
+					if(input.equals("")) {
+						for(Foods f : res) {
+							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+						}
+					}else {
+						for(Foods f : res) {
+							if(f.getMaker().contains(input)) {
+								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+							}
+						}						
+					}
+					
+					
+					
+				}else if(tag.equals("원재료명")) {
+					if(input.equals("")) {
+						for(Foods f : res) {
+							smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+						}
+					}else {
+						for(Foods f : res) {
+							if(f.getMaterial().contains(input)) {
+								smodel.addRow(new Object[] {f.getFoodcode(), f.getFoodname(), f.getMaker(), f.getMaterial()});
+							}
+						}						
+					}
+				}
 				
 			}
 		}
+	}
+	
+	public class Smodel extends DefaultTableModel{
+		
+		List<Foods> res;
+		
+		
+		public void setRes(List<Foods> res) {
+			this.res = res;
+		}
+
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			return res.size();
+		}
+
+		@Override
+		public Object getValueAt(int row, int column) {
+			
+			return super.getValueAt(row, column);
+		}
+		
 	}
 	
 	
