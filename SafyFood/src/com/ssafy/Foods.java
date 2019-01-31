@@ -51,5 +51,11 @@ public class Foods {
 		this.material = material;
 	}
 
+	@Override
+	public String toString() {
+		return "Foods [foodcode=" + foodcode + ", foodname=" + foodname + ", maker=" + maker + ", material=" + material
+				+ "]";
+	}
+
 	
 }

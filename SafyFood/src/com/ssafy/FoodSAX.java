@@ -14,6 +14,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class FoodSAX {
+	private static FoodSAX foodsax;
+	private FoodSAX() {}
+	public static FoodSAX getInstance() {
+		if(foodsax == null) {
+			foodsax = new FoodSAX();
+		}
+		return foodsax;
+	}
+	
 	List<Foods> list = new ArrayList<>();
 	
 	public List<Foods> getFoodsList(String url){
