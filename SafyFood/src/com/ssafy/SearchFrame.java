@@ -27,6 +27,8 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
+import com.ssafy.IntroPage;
 
 public class SearchFrame extends JFrame {
 
@@ -62,7 +65,13 @@ public class SearchFrame extends JFrame {
 	 */
 	public SearchFrame() {
 		fsax = new FoodSAX();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				IntroPage i = new IntroPage();
+				setVisible(false);
+				i.showFrame();
+			}
+		});
 		setBounds(100, 100, 1500, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -253,5 +262,8 @@ public class SearchFrame extends JFrame {
 		}
 	}
 	
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 521808b273bef575d822dc7aba9ceb7a74225f8d
 }
