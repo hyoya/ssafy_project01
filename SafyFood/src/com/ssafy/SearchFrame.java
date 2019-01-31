@@ -1,6 +1,7 @@
 package com.ssafy;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -16,15 +17,28 @@ import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Label;
+
 import javax.swing.JTable;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+import java.awt.GridLayout;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.awt.FlowLayout;
+import javax.swing.JTextArea;
 
 public class SearchFrame extends JFrame {
 
@@ -34,12 +48,14 @@ public class SearchFrame extends JFrame {
 	private final Action action = new SwingAction();
 	private JButton sb;
 	private JComboBox cb;
-	private JTable dt;
-	private JScrollPane spnw;
-	private DefaultTableModel smodel, dmodel;
 	private JScrollPane spnc;
+	private DefaultTableModel smodel, dmodel;
 	private FoodSAX fsax;
 	private List<Foods> list;
+	private JPanel pne;
+	private JPanel pndetail; //디테일을 실을 패널
+	private JLabel foodimg, foodNameL, foodDetailL; //순서대로 이미지, 이름, 디테일
+	private JTextArea textArea;
 
 	/**
 	 * Create the frame.
@@ -83,6 +99,40 @@ public class SearchFrame extends JFrame {
 		
 		
 		st = new JTable(smodel);
+		st.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) { // 마우스로 클릭하면
+				int row = st.getSelectedRow();
+				int col = st.getSelectedColumnCount();
+				System.out.println(row + " " + col + " " +st.getValueAt(row, col) );
+				Foods f;
+				String str = "";
+				foodNameL.setText(st.getValueAt(row, col).toString());
+				for(Foods ff : list) {
+					if(ff.getFoodname().equals(st.getValueAt(row, col))) {
+						str = ff.getNut();
+
+						foodDetailL.setText(ff.getMaterial().toString());
+						try {
+							URL u = new URL(ff.getImage());
+							Image tmp = ImageIO.read(u);
+							//foodimg = new JLabel(new ImageIcon(tmp));
+							foodimg.setIcon(new ImageIcon(tmp));
+						} catch (MalformedURLException e1) {
+							System.out.println(e1);
+						}catch(Exception ee) {
+							System.out.println(ee);
+						}
+					}
+				}
+				String spp[] = str.split(",");
+				textArea.setText("");
+				for(int i =0; i<spp.length; i++) {
+					textArea.append(spp[i] +"\n");
+				}				
+			}
+		});
+		
 		st.getColumnModel(). setColumnSelectionAllowed (true);
 		st.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		st.getColumnModel().getColumn(0).setPreferredWidth(27);
@@ -98,19 +148,52 @@ public class SearchFrame extends JFrame {
             }
         };
 		
-		dt = new JTable(dmodel);
-		dt.getColumnModel(). setColumnSelectionAllowed (true);
-		dt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		dt.getColumnModel().getColumn(0).setPreferredWidth(50);
-		dt.getColumnModel().getColumn(1).setPreferredWidth(50);
-		
-		spnw = new JScrollPane(st);
-		contentPane.add(spnw, BorderLayout.CENTER);
-		
-		spnc = new JScrollPane(dt);
-		contentPane.add(spnc, BorderLayout.EAST);
+		spnc = new JScrollPane(st);
+		contentPane.add(spnc, BorderLayout.CENTER);
 		
 		st.setAutoCreateRowSorter(true);
+		
+		pne = new JPanel();
+		contentPane.add(pne, BorderLayout.EAST);
+		pne.setLayout(new GridLayout(2,2));
+		
+		foodimg = new JLabel("Image Not Found");
+		pne.add(foodimg);
+		
+		pndetail = new JPanel();
+		pne.add(pndetail);
+		pndetail.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		textArea = new JTextArea();
+		pndetail.add(textArea);
+		
+		foodNameL = new JLabel("New label");
+		pne.add(foodNameL);
+		
+		foodDetailL = new JLabel("New label");
+		pne.add(foodDetailL);
+	}
+	
+	private void setDetail(String data) {
+		String detail[] = {"총용량","칼로리","탄수화물","단백질","지방","당류","나트륨","콜레스테롤","포화 지방산","트랜스지방"};
+		String[] sp = data.split(",");
+		
+		GridBagConstraints[] gbc = new GridBagConstraints[20];
+		int idx = 0;
+		for(int i =0; i<20; i++) {
+			gbc[i]=new GridBagConstraints();
+		}
+		
+		for(int i=0; i<18; i+=2) {
+			System.out.println(i);
+			gbc[i].gridx = i;
+			gbc[i].gridx = 0;
+			pndetail.add(new Label(detail[i/2]), gbc[i]);
+			
+			gbc[i+1].gridx = i+1;
+			gbc[i+1].gridx = 1;
+			pndetail.add(new Label(detail[i/2+1]), gbc[i+1]);
+		}
 	}
 
 	private class SwingAction extends AbstractAction {
@@ -168,29 +251,6 @@ public class SearchFrame extends JFrame {
 				}
 			}
 		}
-	}
-	
-	public class Smodel extends DefaultTableModel{
-		
-		List<Foods> res;
-		
-		
-		public void setRes(List<Foods> res) {
-			this.res = res;
-		}
-
-		@Override
-		public int getRowCount() {
-			// TODO Auto-generated method stub
-			return res.size();
-		}
-
-		@Override
-		public Object getValueAt(int row, int column) {
-			
-			return super.getValueAt(row, column);
-		}
-		
 	}
 	
 	
