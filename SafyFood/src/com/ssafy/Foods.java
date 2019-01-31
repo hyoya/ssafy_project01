@@ -6,15 +6,20 @@ public class Foods {
 	private String foodname;
 	private String maker;
 	private String material;
+	private String nut;
+	private String image;
 
 	
-	public Foods(String foodcode, String foodname, String maker, String material) {
+	
+	public Foods(String foodcode, String foodname, String maker, String material, String nut, String image) {
 		this.foodcode = foodcode;
 		this.foodname = foodname;
 		this.maker = maker;
 		this.material = material;
+		this.nut = nut;
+		this.image = image;
 	}
-	
+
 	public Foods() {
 		
 	}
@@ -49,6 +54,22 @@ public class Foods {
 
 	public void setMaterial(String material) {
 		this.material = material;
+	}
+
+	public String getNut() {
+		return nut;
+	}
+
+	public void setNut(String nut) {
+		this.nut = nut;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Override
