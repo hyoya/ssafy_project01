@@ -6,9 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.GridBagLayout;
@@ -43,7 +45,7 @@ public class SearchFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public SearchFrame() {
-		list = new FoodSAX().getFoodsList();
+		fsax = new FoodSAX();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 500);
 		contentPane = new JPanel();
@@ -72,17 +74,35 @@ public class SearchFrame extends JFrame {
 		pnn.add(sb);
 		
 		String sheader[] = {"상품 코드", "상품이름", "제조사", "원재료"};
-		smodel = new DefaultTableModel(sheader, 0);
-		//smodel.addRow(new Object[] {"상품코드","상품이름","!23123","adsfasdfasdf"});
+		smodel = new DefaultTableModel(sheader, 0) {
+            // Jtable 내용 편집 안되게
+            public boolean isCellEditable(int i, int c) {
+                return false;
+            }
+        };
 		
 		
 		st = new JTable(smodel);
+		st.getColumnModel(). setColumnSelectionAllowed (true);
+		st.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		st.getColumnModel().getColumn(0).setPreferredWidth(27);
+		st.getColumnModel().getColumn(1).setPreferredWidth(150);
+		st.getColumnModel().getColumn(2).setPreferredWidth(100);
+		st.getColumnModel().getColumn(3).setPreferredWidth(300);
 		
 		String dheader[] = {"영양성분", "함량"};
-		dmodel = new DefaultTableModel(dheader, 0);
-		//dmodel.addRow(new Object[] {"dafd", "adfas"});
+		dmodel = new DefaultTableModel(dheader, 0) {
+            // Jtable 내용 편집 안되게
+            public boolean isCellEditable(int i, int c) {
+                return false;
+            }
+        };
 		
 		dt = new JTable(dmodel);
+		dt.getColumnModel(). setColumnSelectionAllowed (true);
+		dt.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		dt.getColumnModel().getColumn(0).setPreferredWidth(50);
+		dt.getColumnModel().getColumn(1).setPreferredWidth(50);
 		
 		spnw = new JScrollPane(st);
 		contentPane.add(spnw, BorderLayout.CENTER);
@@ -90,7 +110,7 @@ public class SearchFrame extends JFrame {
 		spnc = new JScrollPane(dt);
 		contentPane.add(spnc, BorderLayout.EAST);
 		
-		
+		st.setAutoCreateRowSorter(true);
 	}
 
 	private class SwingAction extends AbstractAction {
@@ -104,12 +124,11 @@ public class SearchFrame extends JFrame {
 				String input = tf.getText();
 				//TODO
 				String sp[];
+				list = fsax.getFoodsList();
 				
 				while(smodel.getRowCount() != 0) {
 					smodel.removeRow(0);
 				}
-				
-				
 				if(tag.equals("상품명")) {
 					if(input.equals("")) {
 						for(Foods f : list) {
@@ -122,10 +141,6 @@ public class SearchFrame extends JFrame {
 							}
 						}						
 					}
-					
-					
-					
-					
 				}else if(tag.equals("제조사")) {
 					if(input.equals("")) {
 						for(Foods f : list) {
@@ -138,9 +153,6 @@ public class SearchFrame extends JFrame {
 							}
 						}						
 					}
-					
-					
-					
 				}else if(tag.equals("원재료명")) {
 					if(input.equals("")) {
 						for(Foods f : list) {
@@ -154,7 +166,6 @@ public class SearchFrame extends JFrame {
 						}						
 					}
 				}
-				
 			}
 		}
 	}
