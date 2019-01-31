@@ -14,21 +14,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class FoodSAX {
-	private static FoodSAX foodsax;
-	private FoodSAX() {}
-	public static FoodSAX getInstance() {
-		if(foodsax == null) {
-			foodsax = new FoodSAX();
-		}
-		return foodsax;
-	}
 	
 	List<Foods> list = new ArrayList<>();
 	
-	public List<Foods> getFoodsList(String url){
+	public List<Foods> getFoodsList(){
+		//list.clear();
+		String url = "http://apis.data.go.kr/B553748/CertImgListService/getCertImgListService?ServiceKey=nw2RgjbfShJMzZ05sLGUzWEasNUweUuRNuA6YHyEvNHn9b3Ahc9rp8VMOKYbPW5qb%2FKqQ0eP1imWvPWKnjJ9Zw%3D%3D&numOfRows=100";
 		connectFoods(url);
 		return list;
 	}
+	
 	public void connectFoods(String url) {
 		SAXParserFactory f = null;
 		try {
@@ -41,6 +36,7 @@ public class FoodSAX {
 			System.out.println(e);
 		}
 	}
+	
 	class SAXHandler extends DefaultHandler{
 		StringBuilder b = new StringBuilder();
 		boolean flag = false;
