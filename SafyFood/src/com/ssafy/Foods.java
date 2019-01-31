@@ -8,16 +8,20 @@ public class Foods {
 	private String material;
 	private String nut;
 	private String image;
+	private String allergy;
 
 	
 	
-	public Foods(String foodcode, String foodname, String maker, String material, String nut, String image) {
+
+	public Foods(String foodcode, String foodname, String maker, String material, String nut, String image,
+			String allergy) {
 		this.foodcode = foodcode;
 		this.foodname = foodname;
 		this.maker = maker;
 		this.material = material;
 		this.nut = nut;
 		this.image = image;
+		this.allergy = allergy;
 	}
 
 	public Foods() {
@@ -72,11 +76,21 @@ public class Foods {
 		this.image = image;
 	}
 
+	public String getAllergy() {
+		return allergy;
+	}
+
+	public void setAllergy(String allergy) {
+		this.allergy = allergy;
+	}
+
 	@Override
 	public String toString() {
 		return "Foods [foodcode=" + foodcode + ", foodname=" + foodname + ", maker=" + maker + ", material=" + material
-				+ "]";
+				+ ", nut=" + nut + ", image=" + image + ", allergy=" + allergy + "]";
 	}
+
+	
 
 	
 }
