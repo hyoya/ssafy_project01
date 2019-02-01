@@ -42,6 +42,7 @@ import java.net.URL;
 import java.awt.FlowLayout;
 import javax.swing.JTextArea;
 import com.ssafy.IntroPage;
+import javax.swing.SwingConstants;
 
 public class SearchFrame extends JFrame {
 
@@ -58,7 +59,10 @@ public class SearchFrame extends JFrame {
 	private JPanel pne;
 	private JPanel pndetail; //디테일을 실을 패널
 	private JLabel foodimg, foodNameL, foodDetailL; //순서대로 이미지, 이름, 디테일
-	private JTextArea textArea;
+	private JTextArea taMet, taDetail;
+	private JPanel pnta;
+	private JLabel pntal2;
+	private JLabel pntal1;
 
 	/**
 	 * Create the frame.
@@ -72,8 +76,10 @@ public class SearchFrame extends JFrame {
 				i.showFrame();
 			}
 		});
-		setBounds(100, 100, 1500, 500);
+		setBounds(100, 100, 1500, 900);
 		contentPane = new JPanel();
+		contentPane.setForeground(Color.WHITE);
+		contentPane.setBackground(Color.ORANGE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -113,19 +119,19 @@ public class SearchFrame extends JFrame {
 			public void mouseClicked(MouseEvent e) { // 마우스로 클릭하면
 				int row = st.getSelectedRow();
 				int col = st.getSelectedColumnCount();
-				System.out.println(row + " " + col + " " +st.getValueAt(row, col) );
-				Foods f;
+				//System.out.println(row + " " + col + " " +st.getValueAt(row, col) );
+				
 				String str = "";
+				String destr = "";
 				foodNameL.setText(st.getValueAt(row, col).toString());
 				for(Foods ff : list) {
 					if(ff.getFoodname().equals(st.getValueAt(row, col))) {
 						str = ff.getNut();
-
-						foodDetailL.setText(ff.getMaterial().toString());
+						destr = ff.getMaterial();
+						//foodDetailL.setText(ff.getMaterial().toString());
 						try {
 							URL u = new URL(ff.getImage());
 							Image tmp = ImageIO.read(u);
-							//foodimg = new JLabel(new ImageIcon(tmp));
 							foodimg.setIcon(new ImageIcon(tmp));
 						} catch (MalformedURLException e1) {
 							System.out.println(e1);
@@ -135,10 +141,16 @@ public class SearchFrame extends JFrame {
 					}
 				}
 				String spp[] = str.split(",");
-				textArea.setText("");
+				taMet.setText("");
 				for(int i =0; i<spp.length; i++) {
-					textArea.append(spp[i] +"\n");
-				}				
+					taMet.append(spp[i] +"\n");
+				}
+				
+				spp = destr.split(",");
+				taDetail.setText("");
+				for(int i =0; i<spp.length; i++) {
+					taDetail.append(spp[i]+ "\n");
+				}
 			}
 		});
 		
@@ -164,51 +176,56 @@ public class SearchFrame extends JFrame {
 		
 		pne = new JPanel();
 		contentPane.add(pne, BorderLayout.EAST);
-		pne.setLayout(new GridLayout(2,2));
+		pne.setLayout(new GridLayout(3,1,0,10));
 		
-		foodimg = new JLabel("Image Not Found");
+		foodimg = new JLabel();
 		pne.add(foodimg);
 		
 		pndetail = new JPanel();
-		pne.add(pndetail);
+		//pne.add(pndetail);
 		pndetail.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		textArea = new JTextArea();
-		pndetail.add(textArea);
 		
-		foodNameL = new JLabel("New label");
+		foodNameL = new JLabel();
+		foodNameL.setHorizontalAlignment(SwingConstants.CENTER);
 		pne.add(foodNameL);
+		foodNameL.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		
-		foodDetailL = new JLabel("New label");
-		pne.add(foodDetailL);
+		pnta = new JPanel();
+		pnta.setBackground(Color.WHITE);
+		pne.add(pnta);
+		pnta.setLayout(new GridLayout(2, 2, 0, 0));
+		
+		pntal1 = new JLabel("영양성분");
+		pntal1.setHorizontalAlignment(SwingConstants.CENTER);
+		pntal1.setFont(new Font("돋움", Font.PLAIN, 15));
+		pnta.add(pntal1);
+		
+		pntal2 = new JLabel("원재료");
+		pntal2.setHorizontalAlignment(SwingConstants.CENTER);
+		pntal2.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		pnta.add(pntal2);
+		
+		taMet = new JTextArea();
+		pnta.add(taMet);
+		
+		taDetail = new JTextArea();
+		pnta.add(taDetail);
+		
+		JPanel pnDetail = new JPanel();
+		pnDetail.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+		
+		pnn.setBackground(new Color(255,255,255));
+		pnDetail.setBackground(new Color(255,255,255));
+		pne.setBackground(new Color(255,255,255));
+		pnn.setBackground(new Color(255,255,255));
 	}
 	
-	private void setDetail(String data) {
-		String detail[] = {"총용량","칼로리","탄수화물","단백질","지방","당류","나트륨","콜레스테롤","포화 지방산","트랜스지방"};
-		String[] sp = data.split(",");
-		
-		GridBagConstraints[] gbc = new GridBagConstraints[20];
-		int idx = 0;
-		for(int i =0; i<20; i++) {
-			gbc[i]=new GridBagConstraints();
-		}
-		
-		for(int i=0; i<18; i+=2) {
-			System.out.println(i);
-			gbc[i].gridx = i;
-			gbc[i].gridx = 0;
-			pndetail.add(new Label(detail[i/2]), gbc[i]);
-			
-			gbc[i+1].gridx = i+1;
-			gbc[i+1].gridx = 1;
-			pndetail.add(new Label(detail[i/2+1]), gbc[i+1]);
-		}
-	}
 
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+			putValue(NAME, "Search");
+			putValue(SHORT_DESCRIPTION, "검색하세요!");
 		}
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == sb) { //서치 버튼을 눌렀다면
@@ -261,9 +278,4 @@ public class SearchFrame extends JFrame {
 			}
 		}
 	}
-	
-<<<<<<< HEAD
-	
-=======
->>>>>>> 521808b273bef575d822dc7aba9ceb7a74225f8d
 }
